@@ -32,6 +32,10 @@ files; the rest is copied verbatim.
   A writer that drops a field, a reader that ignores one, or a field-number mismatch between
   the two fails here.
 - Every generated enum declares `0` as its first value, as proto3 requires.
+- `FillScalarFields` handles every protobuf scalar type. No single product uses all of them —
+  the sip protos declare no `float` and no `uint64` — so the branches are pinned against
+  `google.protobuf`'s wrapper types, which libprotobuf registers into the same pool. That is
+  what lets `descriptor_probe.cc` be copied between products untouched.
 - `optional float lifespan_time` — a proto3 *explicit presence* field — still reports
   `has_...()` after a `0.0` round trip, while the plain `int32 lifespan_count` correctly keeps
   its zero value off the wire. This is the bug class that broke the Angular client.

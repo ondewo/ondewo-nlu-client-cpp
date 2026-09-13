@@ -72,9 +72,10 @@ const std::string kScalarMessageFullName = "ondewo.nlu.Context";
 
 const std::string kEnumFullName = "ondewo.nlu.IntentView";
 
-// ONDEWO NLU API 7.1.0 generates 715 messages (map entries excluded) and 83 enums across
-// the files listed above. The floors sit just below that.
+// ONDEWO NLU API 7.1.0 generates 715 messages (map entries excluded), 83 enums and 2154
+// singular scalar fields across the files listed above. The floors sit just below that.
 const int kMinimumMessageCount = 700;
 const int kMinimumEnumCount = 80;
+const int kMinimumScalarFieldCount = 2000;
 
 }  // namespace ondewo_client_test

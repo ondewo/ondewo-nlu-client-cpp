@@ -128,6 +128,9 @@ int FillScalarFields(Message* message) {
       case FieldDescriptor::CPPTYPE_UINT32:
         reflection->SetUInt32(message, field, static_cast<uint32_t>(seed));
         break;
+      case FieldDescriptor::CPPTYPE_UINT64:
+        reflection->SetUInt64(message, field, static_cast<uint64_t>(seed));
+        break;
       case FieldDescriptor::CPPTYPE_DOUBLE:
         reflection->SetDouble(message, field, seed + 0.5);
         break;

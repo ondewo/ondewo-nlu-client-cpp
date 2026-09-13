@@ -80,10 +80,46 @@ TEST(GeneratedStubs, EveryMessageRoundTripsThroughTheWireFormat) {
   }
   std::cout << "[          ] swept " << messages_checked << " messages, filled "
             << fields_filled << " scalar fields" << std::endl;
-  // A floor, not an exact count: the API gains messages over time, but it must never
-  // silently lose most of them because a .proto stopped being generated or linked.
+  // Floors, not exact counts: the API gains messages and fields over time, but it must
+  // never silently lose most of them because a .proto stopped being generated or linked.
   EXPECT_GE(messages_checked, kMinimumMessageCount) << "the sweep checked far too few messages";
-  EXPECT_GT(fields_filled, messages_checked) << "the sweep barely set any scalar field";
+  EXPECT_GE(fields_filled, kMinimumScalarFieldCount) << "the sweep set far too few fields";
+}
+
+// FillScalarFields branches on the protobuf C++ type, and no single product uses every one
+// of them - the sip protos, for instance, declare no float and no uint64 at all. The
+// branches are therefore pinned down here against google.protobuf's wrapper types, which
+// libprotobuf registers into this same generated pool and which carry exactly one field of
+// each scalar type. This is what keeps the helper honest for every ONDEWO product without
+// having to trim it per repository.
+TEST(GeneratedStubs, FillScalarFieldsHandlesEveryProtobufScalarType) {
+  const std::vector<std::string> one_field_wrappers = {
+      "google.protobuf.DoubleValue", "google.protobuf.FloatValue",
+      "google.protobuf.Int64Value",  "google.protobuf.UInt64Value",
+      "google.protobuf.Int32Value",  "google.protobuf.UInt32Value",
+      "google.protobuf.BoolValue",   "google.protobuf.StringValue",
+      "google.protobuf.BytesValue",
+  };
+  for (const std::string& full_name : one_field_wrappers) {
+    std::unique_ptr<google::protobuf::Message> message = NewMessage(full_name);
+    ASSERT_NE(message, nullptr) << full_name << " is not in the generated pool";
+    EXPECT_EQ(FillScalarFields(message.get()), 1) << full_name << " was left unset";
+    EXPECT_FALSE(message->SerializeAsString().empty()) << full_name << " never reached the wire";
+    EXPECT_TRUE(RoundTrips(*message)) << full_name << " does not survive serialize -> parse";
+  }
+
+  // google.protobuf.Value is a oneof of an enum, a double, a string, a bool and two
+  // message-typed alternatives - the last of which is the branch that must stay untouched.
+  std::unique_ptr<google::protobuf::Message> value = NewMessage("google.protobuf.Value");
+  ASSERT_NE(value, nullptr);
+  EXPECT_EQ(FillScalarFields(value.get()), 4) << "google.protobuf.Value: unexpected fill count";
+  EXPECT_TRUE(RoundTrips(*value));
+
+  // A message whose only field is message-typed must come back untouched.
+  std::unique_ptr<google::protobuf::Message> wrapper = NewMessage("google.protobuf.Struct");
+  ASSERT_NE(wrapper, nullptr);
+  EXPECT_EQ(FillScalarFields(wrapper.get()), 0) << "a map<> field was filled after all";
+  EXPECT_TRUE(wrapper->SerializeAsString().empty());
 }
 
 // proto3 requires the first value of an enum to be 0, and the generated code has to carry

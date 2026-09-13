@@ -43,5 +43,6 @@ extern const std::string kEnumFullName;
 // grows, never lower them to make a red build green.
 extern const int kMinimumMessageCount;
 extern const int kMinimumEnumCount;
+extern const int kMinimumScalarFieldCount;
 
 }  // namespace ondewo_client_test

@@ -51,9 +51,8 @@ std::unique_ptr<google::protobuf::Message> NewMessage(const std::string& full_na
 // Sets every singular scalar field of `message` to a deterministic non-default value
 // derived from the field number, so that the field actually reaches the wire.
 //
-// Message-typed and uint64 fields fall through untouched: sub-messages are covered by the
-// per-message sweep (every message is filled and round-tripped on its own) and the ONDEWO
-// .proto files declare no uint64 field.
+// Message-typed fields are left untouched - a sub-message is covered on its own by the
+// per-message sweep, which fills and round-trips every generated message in the pool.
 //
 // Returns the number of fields it set.
 int FillScalarFields(google::protobuf::Message* message);
