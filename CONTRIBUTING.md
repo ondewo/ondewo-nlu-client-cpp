@@ -19,7 +19,10 @@ requests.
 
 ## Before you open a pull request here
 
-**Almost nothing in this repository is written by hand.** `api/`, `public-api.h`, `CMakeLists.txt` and
+**Almost nothing in this repository is written by hand.** The exceptions are `client/` (the header-only TLS channel
+helper, with `tests/test_tls.cc`), the test suite, and the guarded `client/` block in the root
+`CMakeLists.txt` - the compiler keeps a committed `CMakeLists.txt` on regeneration and copies `client/` into its
+build, so both survive `make build`. `api/`, `public-api.h`, `CMakeLists.txt` and
 `ondewo-client-config.cmake.in` all come from the `ondewo-cpp-proto-compiler` docker image. Editing them
 directly is never the fix: the next `make build` overwrites `api/` and `public-api.h`, and the two build files
 are the compiler's defaults - it keeps the committed copies and writes its current ones to `api/*.generated`
