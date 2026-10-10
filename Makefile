@@ -176,7 +176,7 @@ makefile_chapters: ## Shows all sections of Makefile
 TEST: ## Diagnostics - report whether release credentials are set and print the current release notes
 # The placeholder counts as unset - `$(if $(GITHUB_GH_TOKEN),...)` alone reports "yes" for the
 # default ENTER_YOUR_TOKEN_HERE and hides the one thing this line exists to tell you.
-	@if [ -z "${GITHUB_GH_TOKEN}" ] || [ "${GITHUB_GH_TOKEN}" = "ENTER_YOUR_TOKEN_HERE" ]; then \
+	@if [ -z "$${GITHUB_GH_TOKEN}" ] || [ "$${GITHUB_GH_TOKEN}" = "ENTER_YOUR_TOKEN_HERE" ]; then \
 		echo "GITHUB_GH_TOKEN is set: no"; \
 	else \
 		echo "GITHUB_GH_TOKEN is set: yes"; \
@@ -479,7 +479,7 @@ check_release_credentials: ## Fail loudly when the GitHub release credential is 
 # The value is only ever tested, never printed - not even partially. The placeholder counts as
 # unset: `$(if $(GITHUB_GH_TOKEN),...)` alone reports the default ENTER_YOUR_TOKEN_HERE as "set"
 # and would let a release run all the way to the `gh auth login` below before failing.
-	@if [ -z "${GITHUB_GH_TOKEN}" ] || [ "${GITHUB_GH_TOKEN}" = "ENTER_YOUR_TOKEN_HERE" ]; then \
+	@if [ -z "$${GITHUB_GH_TOKEN}" ] || [ "$${GITHUB_GH_TOKEN}" = "ENTER_YOUR_TOKEN_HERE" ]; then \
 		echo "$(RED)[ERROR]$(NC) refusing to release - GITHUB_GH_TOKEN is not set"; \
 		echo "        release with 'make ondewo_release', which reads it from ${DEVOPS_ACCOUNT_GIT}/account_github.env"; \
 		exit 1; \
@@ -489,7 +489,7 @@ check_release_credentials: ## Fail loudly when the GitHub release credential is 
 # Depends on the check so that calling login_to_gh on its own is guarded too - `release` has
 # already run it by then, and make will not run it twice within one invocation.
 login_to_gh: check_release_credentials ## Login to Github CLI with Access Token
-	@echo "${GITHUB_GH_TOKEN}" | gh auth login -p ssh --with-token
+	@echo "$${GITHUB_GH_TOKEN}" | gh auth login -p ssh --with-token
 
 # Read-only proof that the token will carry the steps after the tag: the very `gh auth login` they
 # use (it rejects an unknown, expired or revoked token with "HTTP 401: Bad credentials"), then
@@ -691,11 +691,14 @@ clone_devops_accounts: ## Clones devops-accounts repo
 	git clone git@bitbucket.org:ondewo/${DEVOPS_ACCOUNT_GIT}.git
 
 # Exactly the one credential this client uses, by an ANCHORED grep: the devops files carry '#'
-# comment lines that mention variable names, and an unanchored match would hand such a line to the
-# command below, where its '#' comments out everything after it. @-prefixed so make never echoes it.
+# comment lines that mention variable names, and an unanchored match would pick such a line up.
+# The value is exported into the sub-make's ENVIRONMENT: `make release NAME=<value>` would put it
+# on make's argv, which /proc/<pid>/cmdline shows to every user on the host.
 run_release_with_devops: ## Read credentials from the cloned devops-accounts repo and run the full release
-	$(eval info:= $(shell grep -E '^GITHUB_GH_TOKEN=' ${DEVOPS_ACCOUNT_DIR}/account_github.env))
-	@make release $(info)
+	@set -a \
+		&& eval "$$(grep -h -E '^GITHUB_GH_TOKEN=' ${DEVOPS_ACCOUNT_DIR}/account_github.env)" \
+		&& set +a \
+		&& $(MAKE) release
 
 spc: ## Checks if the Release Branch and Tag already exist
 	$(eval filtered_branches:= $(shell git branch --all | grep -E "(^|[ /])release/$(subst .,\.,${ONDEWO_NLU_VERSION})$$"))
