@@ -79,7 +79,7 @@ carries the built package as an asset: `ondewo_nlu_client-<version>-<platform>.t
 package-config files - so consuming it is one `find_package`, with no compiler run and no Docker.
 
 ```shell
-version=7.3.0
+version=7.3.1
 platform=linux-x86_64     ## uname -s | tr A-Z a-z, then uname -m
 archive=ondewo_nlu_client-${version}-${platform}.tar.gz
 
@@ -124,7 +124,7 @@ set(ONDEWO_LIBRARY_NAME ondewo_nlu_client CACHE STRING "" FORCE)
 FetchContent_Declare(
   ondewo_nlu_client
   GIT_REPOSITORY https://github.com/ondewo/ondewo-nlu-client-cpp.git
-  GIT_TAG        7.3.0)
+  GIT_TAG        7.3.1)
 FetchContent_MakeAvailable(ondewo_nlu_client)
 
 # Note the UNqualified target name: the `ondewo::` namespace is created by the install/export step
