@@ -33,6 +33,8 @@
 #include "ondewo/nlu/intent.pb.h"
 #include "ondewo/nlu/llm_evaluation.grpc.pb.h"
 #include "ondewo/nlu/llm_evaluation.pb.h"
+#include "ondewo/nlu/logs.grpc.pb.h"
+#include "ondewo/nlu/logs.pb.h"
 #include "ondewo/nlu/operation_metadata.grpc.pb.h"
 #include "ondewo/nlu/operation_metadata.pb.h"
 #include "ondewo/nlu/operations.grpc.pb.h"

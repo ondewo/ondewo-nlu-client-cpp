@@ -2,6 +2,15 @@
 
 *****************
 
+## Release ONDEWO NLU C++ Client 7.6.0
+
+### Improvements
+
+* Tracking API Version [7.6.0](https://github.com/ondewo/ondewo-nlu-api/releases/tag/7.6.0) ( [Documentation](https://ondewo.github.io/ondewo-nlu-api/) )
+* Generated with ondewo-proto-compiler 5.17.0. Runtime floors unchanged: protobuf 3.21.12 / grpc 1.51.1 (Debian trixie). `public-api.h` now also includes the `logs` headers.
+
+*****************
+
 ## Release ONDEWO NLU C++ Client 7.4.0
 
 ### Improvements

@@ -54,12 +54,12 @@ export
 # CMake's project(VERSION ...) and write_basic_package_version_file() only accept a dotted
 # numeric MAJOR.MINOR.PATCH here - a pre-release suffix such as 1.2.0-rc1 aborts the configure
 # step, so the compiler image rejects it up front.
-ONDEWO_NLU_VERSION=7.4.0
+ONDEWO_NLU_VERSION=7.6.0
 
 # Submodule pins. Both are checked out by `make checkout_defined_submodule_versions`, which is
 # part of `make build`, so a build is always reproducible from these two lines alone.
-ONDEWO_NLU_API_GIT_BRANCH=tags/7.4.0
-ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.16.0
+ONDEWO_NLU_API_GIT_BRANCH=tags/7.6.0
+ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.17.0
 
 # Read from ondewo-devops-accounts/account_github.env by `make ondewo_release` - never set it here.
 # It needs push access to this repository; validate_release_credentials proves that before a release
