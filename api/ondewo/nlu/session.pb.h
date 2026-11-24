@@ -10235,6 +10235,7 @@ class ReferencedChunk final :
     kContentFieldNumber = 6,
     kDocumentUrlFieldNumber = 8,
     kDeepLinkUrlFieldNumber = 9,
+    kDocumentTitleFieldNumber = 10,
     kReferenceIndexFieldNumber = 1,
     kSimilarityFieldNumber = 7,
   };
@@ -10336,6 +10337,20 @@ class ReferencedChunk final :
   std::string* _internal_mutable_deep_link_url();
   public:
 
+  // string document_title = 10;
+  void clear_document_title();
+  const std::string& document_title() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_document_title(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_document_title();
+  PROTOBUF_NODISCARD std::string* release_document_title();
+  void set_allocated_document_title(std::string* document_title);
+  private:
+  const std::string& _internal_document_title() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_document_title(const std::string& value);
+  std::string* _internal_mutable_document_title();
+  public:
+
   // int32 reference_index = 1;
   void clear_reference_index();
   int32_t reference_index() const;
@@ -10369,6 +10384,7 @@ class ReferencedChunk final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr content_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr document_url_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr deep_link_url_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr document_title_;
     int32_t reference_index_;
     float similarity_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -45378,6 +45394,56 @@ inline void ReferencedChunk::set_allocated_deep_link_url(std::string* deep_link_
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:ondewo.nlu.ReferencedChunk.deep_link_url)
+}
+
+// string document_title = 10;
+inline void ReferencedChunk::clear_document_title() {
+  _impl_.document_title_.ClearToEmpty();
+}
+inline const std::string& ReferencedChunk::document_title() const {
+  // @@protoc_insertion_point(field_get:ondewo.nlu.ReferencedChunk.document_title)
+  return _internal_document_title();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ReferencedChunk::set_document_title(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.document_title_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ondewo.nlu.ReferencedChunk.document_title)
+}
+inline std::string* ReferencedChunk::mutable_document_title() {
+  std::string* _s = _internal_mutable_document_title();
+  // @@protoc_insertion_point(field_mutable:ondewo.nlu.ReferencedChunk.document_title)
+  return _s;
+}
+inline const std::string& ReferencedChunk::_internal_document_title() const {
+  return _impl_.document_title_.Get();
+}
+inline void ReferencedChunk::_internal_set_document_title(const std::string& value) {
+  
+  _impl_.document_title_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ReferencedChunk::_internal_mutable_document_title() {
+  
+  return _impl_.document_title_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ReferencedChunk::release_document_title() {
+  // @@protoc_insertion_point(field_release:ondewo.nlu.ReferencedChunk.document_title)
+  return _impl_.document_title_.Release();
+}
+inline void ReferencedChunk::set_allocated_document_title(std::string* document_title) {
+  if (document_title != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.document_title_.SetAllocated(document_title, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.document_title_.IsDefault()) {
+    _impl_.document_title_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ondewo.nlu.ReferencedChunk.document_title)
 }
 
 // -------------------------------------------------------------------

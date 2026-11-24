@@ -54,11 +54,11 @@ export
 # CMake's project(VERSION ...) and write_basic_package_version_file() only accept a dotted
 # numeric MAJOR.MINOR.PATCH here - a pre-release suffix such as 1.2.0-rc1 aborts the configure
 # step, so the compiler image rejects it up front.
-ONDEWO_NLU_VERSION=7.4.0
+ONDEWO_NLU_VERSION=7.5.0
 
 # Submodule pins. Both are checked out by `make checkout_defined_submodule_versions`, which is
 # part of `make build`, so a build is always reproducible from these two lines alone.
-ONDEWO_NLU_API_GIT_BRANCH=tags/7.4.0
+ONDEWO_NLU_API_GIT_BRANCH=tags/7.5.0
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.15.7
 
 # Read from ondewo-devops-accounts/account_github.env by `make ondewo_release` - never set it here.
@@ -534,7 +534,7 @@ build_gh_release: check_release_notes ## Create the GitHub release with the rele
 		echo "$(RED)[ERROR]$(NC) $(PACKAGE_ARCHIVE) or its .sha256 does not exist - run 'make build_package' first"; \
 		exit 1; \
 	}
-	gh release create --repo $(GH_REPO) "$(ONDEWO_NLU_VERSION)" -n "$(CURRENT_RELEASE_NOTES)" -t "Release ${ONDEWO_NLU_VERSION}" \
+	gh release create --latest=false --repo $(GH_REPO) "$(ONDEWO_NLU_VERSION)" -n "$(CURRENT_RELEASE_NOTES)" -t "Release ${ONDEWO_NLU_VERSION}" \
 		$(PACKAGE_ARCHIVE) $(PACKAGE_ARCHIVE).sha256
 
 ########################################################
@@ -553,7 +553,7 @@ build_gh_release: check_release_notes ## Create the GitHub release with the rele
 # The packaging gate `make test` runs before every release: if the archive cannot be built, or
 # cannot be consumed once extracted, that fails here rather than after the tag is pushed.
 publish_dry_run: build_package verify_package ## Build the release archive and consume it - everything but the upload, no credentials needed
-	@echo "$(BLUE)[INFO]$(NC) would upload: gh release create --repo $(GH_REPO) $(ONDEWO_NLU_VERSION) ... $(PACKAGE_ARCHIVE) $(PACKAGE_ARCHIVE).sha256"
+	@echo "$(BLUE)[INFO]$(NC) would upload: gh release create --latest=false --repo $(GH_REPO) $(ONDEWO_NLU_VERSION) ... $(PACKAGE_ARCHIVE) $(PACKAGE_ARCHIVE).sha256"
 	@echo "$(GREEN)[SUCCESS]$(NC) Packaging dry-run complete - nothing was uploaded"
 
 build_package: ## Stage the install tree into dist/<library>-<version>-<platform>.tar.gz and checksum it
